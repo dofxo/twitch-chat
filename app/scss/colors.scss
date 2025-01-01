@@ -1,0 +1,10 @@
+:root {
+  &[data-theme="primary"] {
+    --bg-color: #FFF7F7;
+  }
+
+  &[data-theme="purple"] {
+    --bg-color: #C68FE6;
+  }
+
+}
