@@ -6,6 +6,7 @@ import {
 } from "@radix-ui/react-popover";
 import { useTheme } from "../../hooks/useTheme";
 import { themes } from "./themes";
+import { Paintbrush } from "lucide-react";
 
 const Header = () => {
   const themeFromLocalStorage = localStorage.getItem("theme") || "primary";
@@ -13,11 +14,13 @@ const Header = () => {
 
   return (
     <header className="shadow p-3">
-      <div className="container flex justify-between">
+      <div className="container flex justify-between items-center">
         <h1>Twitch Chat Overlay</h1>
         <Popover>
-          <PopoverTrigger className="rounded-full bg-[var(--bg-color)] shadow-[inset_0_0_2px_0_#222000]  w-[20px] h-[20px]"></PopoverTrigger>
-          <PopoverContent className="bg-[var(--bg-color)] flex gap-5 shadow shadow-gray-500 p-2 rounded right-0 top-[15px] w-[max-content] absolute">
+          <PopoverTrigger>
+            <Paintbrush />
+          </PopoverTrigger>
+          <PopoverContent className="bg-[var(--bg-color)] flex gap-5 shadow shadow-gray-500 p-2 rounded right-[50%] translate-x-[50%] top-2  w-[max-content] absolute">
             {themes.map((theme) => (
               <div
                 onClick={() => setTheme(`${theme.themeName}`)}
