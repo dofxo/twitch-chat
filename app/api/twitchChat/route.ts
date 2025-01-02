@@ -4,12 +4,13 @@ import tmi from "tmi.js";
 const connectedChannels: Set<string> = new Set();
 
 export async function GET(req: NextRequest) {
-  const channel = req.nextUrl.searchParams.get("channel") || "naiyanaa";
+  const channel = req.nextUrl.searchParams.get("channel") as string;
 
   return new NextResponse(
     new ReadableStream({
       start(controller) {
         let isStreamOpen = true; // Track whether the stream is open
+        const abortController = new AbortController(); // Create an AbortController
 
         // Function to send message to the client only if the stream is open
         const sendMessage = (message: string) => {
@@ -57,7 +58,20 @@ export async function GET(req: NextRequest) {
               controller.close(); // Close the stream when disconnected
             }
           });
+
+          // Handle stream cancellation by listening to the abort signal
+          abortController.signal.addEventListener("abort", () => {
+            if (isStreamOpen) {
+              isStreamOpen = false;
+              controller.close();
+            }
+          });
         }
+
+        // Attach the abort controller to the stream cancellation logic
+        req.signal.addEventListener("abort", () => {
+          abortController.abort(); // Abort the stream on request cancellation
+        });
       },
 
       cancel() {
