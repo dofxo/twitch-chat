@@ -9,7 +9,5 @@ export const get7tvEmotes = async (username: string) => {
     `https://7tv.io/v3/users/twitch/${userId}`,
   );
 
-  const avatarUrl = emotesList.user.avatar_url;
-
-  return { emotesList, avatarUrl };
+  return { emotesList };
 };

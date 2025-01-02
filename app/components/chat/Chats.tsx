@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
+import { getUserAvatar } from "@/app/utils/getUserAvatar";
 
 interface Message {
   channel: string;
@@ -92,7 +93,7 @@ const Chats: React.FC = () => {
                   const channelName = inputRef.current.value;
                   setChannel(channelName);
 
-                  const { avatarUrl } = await get7tvEmotes(channelName);
+                  const avatarUrl = await getUserAvatar(channelName);
                   setAvatar(avatarUrl);
                 } catch (error) {
                   toast.error("channel does not exist");
