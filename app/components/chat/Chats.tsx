@@ -10,7 +10,7 @@ interface Message {
 
 const Chats: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const channel = "dofxo";
+  const channel = "subroza";
 
   useEffect(() => {
     const eventSource = new EventSource(`/api/twitchChat?channel=${channel}`);
@@ -18,6 +18,7 @@ const Chats: React.FC = () => {
     eventSource.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
+        console.log(data.chatInfo);
 
         if (data.type === "chat") {
           setMessages((prev) => [...prev, data]);
@@ -26,13 +27,6 @@ const Chats: React.FC = () => {
         console.error("Error processing SSE:", error);
       }
     };
-
-    eventSource.onerror = (error) => {
-      console.error("Error receiving SSE:", error);
-      eventSource.close();
-    };
-
-    return () => eventSource.close();
   }, [channel]);
 
   return (
@@ -43,12 +37,15 @@ const Chats: React.FC = () => {
             Channel: {channel}
           </h2>
           <div className="messages space-y-2 max-h-64 overflow-y-auto">
-            {messages.map((msg, index) => (
+            {messages.map((msg: any, index) => (
               <div key={index} className="message p-2 bg-white rounded shadow">
-                <span className="font-semibold text-blue-500">
-                  {msg.displayName}:
+                <span
+                  className="font-semibold"
+                  style={{ color: msg.chatInfo.color ?? "gray" }}
+                >
+                  {msg.chatInfo["display-name"]}:
                 </span>
-                <span className="text-gray-800">{msg.content}</span>
+                <span className="text-gray-800"> {msg.content}</span>
               </div>
             ))}
           </div>

@@ -9,28 +9,30 @@ export async function GET(req: NextRequest) {
   return new NextResponse(
     new ReadableStream({
       start(controller) {
-        const sendMessage = (message: string) => {
-          controller.enqueue(`data: ${message}\n\n`);
-        };
+        let isStreamOpen = true; // Track whether the stream is open
 
-        sendMessage(
-          JSON.stringify({
-            type: "info",
-            message: `Connected to ${channel} chat`,
-          }),
-        );
+        // Function to send message to the client only if the stream is open
+        const sendMessage = (message: string) => {
+          if (isStreamOpen) {
+            try {
+              controller.enqueue(`data: ${message}\n\n`);
+            } catch (error) {
+              console.error("Error enqueuing message:", error);
+            }
+          }
+        };
 
         const onMessage = (
           channelName: string,
           userstate: tmi.Userstate,
           message: string,
         ) => {
-          if (channelName.slice(1) === channel) {
+          if (channelName.slice(1) === channel && isStreamOpen) {
             sendMessage(
               JSON.stringify({
                 type: "chat",
                 channel: channelName,
-                displayName: (userstate as any)["display-name"],
+                chatInfo: userstate,
                 content: message,
               }),
             );
@@ -47,7 +49,19 @@ export async function GET(req: NextRequest) {
 
           client.connect();
           client.on("message", onMessage);
+
+          // Handle disconnect by closing the stream
+          client.on("disconnected", () => {
+            if (isStreamOpen) {
+              isStreamOpen = false; // Mark the stream as closed
+              controller.close(); // Close the stream when disconnected
+            }
+          });
         }
+      },
+
+      cancel() {
+        console.log("Stream cancelled.");
       },
     }),
     {
