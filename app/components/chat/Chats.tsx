@@ -15,6 +15,7 @@ import {
   getBadgeUrl,
   scrapeBadgeData,
 } from "@/app/utils/getBadgesUrl";
+import { disconnect } from "process";
 
 interface Message {
   channel: string;
@@ -32,6 +33,7 @@ const Chats: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
+  const eventSourceRef = useRef<EventSource | null>(null);
 
   useEffect(() => {
     if (!channel) return;
@@ -98,6 +100,8 @@ const Chats: React.FC = () => {
             if (data.type === "chat") {
               setMessages((prev) => [...prev, data]);
             }
+
+            eventSourceRef.current = eventSource;
           } catch (error) {
             console.error("Error processing SSE:", error);
           }
@@ -125,6 +129,16 @@ const Chats: React.FC = () => {
     const isAtBottom = scrollTop + clientHeight >= scrollHeight - 50;
 
     setIsUserScrolling(!isAtBottom);
+  };
+
+  const disconnectChat = () => {
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+      eventSourceRef.current = null;
+    }
+    setChannel("");
+    setMessages([]);
+    setAvatar(null);
   };
 
   return (
@@ -167,7 +181,7 @@ const Chats: React.FC = () => {
           <div className="chat-box border p-4 rounded bg-gray-100 shadow grid">
             {!loading ? (
               <>
-                <Button className="w-fit mb-10" onClick={() => setChannel("")}>
+                <Button className="w-fit mb-10" onClick={disconnect}>
                   <ArrowLeft />
                 </Button>
                 <h2 className="font-bold mb-2 text-lg text-purple-600 flex items-center gap-2">
