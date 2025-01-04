@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { getBadgeURL } from "./badgeUrl";
 import { get7tvEmotes } from "@/app/utils/getEmotes";
 import { getEmoteUrlByName } from "@/app/utils/getSingle7tvEmote";
 import { Input } from "@/components/ui/input";
@@ -11,6 +10,11 @@ import Image from "next/image";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import { getUserAvatar } from "@/app/utils/getUserAvatar";
+import {
+  badgeDataType,
+  getBadgeUrl,
+  scrapeBadgeData,
+} from "@/app/utils/getBadgesUrl";
 
 interface Message {
   channel: string;
@@ -23,6 +27,7 @@ const Chats: React.FC = () => {
   const [avatar, setAvatar] = useState(null);
   const [channel, setChannel] = useState("");
   const [loading, setLoading] = useState(false);
+  const [badgeData, setBadgeData] = useState();
   const [buttonLoading, setButtonLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -32,6 +37,9 @@ const Chats: React.FC = () => {
       setLoading(true);
 
       try {
+        const badgesData: any = await scrapeBadgeData(channel);
+        if (badgesData) setBadgeData(badgesData);
+
         const { emotesList } = await get7tvEmotes(channel);
 
         const eventSource = new EventSource(
@@ -130,16 +138,27 @@ const Chats: React.FC = () => {
                       className="message p-2 bg-white rounded shadow flex items-center gap-2"
                     >
                       <div className="badges flex items-center gap-2">
-                        {/* {msg.chatInfo.badges && */}
-                        {/*   Object.keys(msg.chatInfo.badges).map((badge, idx) => ( */}
-                        {/*     <Image */}
-                        {/*       width={20} */}
-                        {/*       height={20} */}
-                        {/*       alt={badge} */}
-                        {/*       key={idx} */}
-                        {/*       src={getBadgeURL(badge)} */}
-                        {/*     /> */}
-                        {/*   ))} */}
+                        {msg.chatInfo.badges &&
+                          Object.entries(msg.chatInfo.badges).map(
+                            (badge, idx) => {
+                              const combinedBadge = `${badge[0]}/${badge[1]}`;
+                              const badgeUrl = getBadgeUrl(
+                                combinedBadge,
+                                badgeData as unknown as badgeDataType,
+                              );
+
+                              if (!badgeUrl) return null;
+                              return (
+                                <Image
+                                  width={20}
+                                  height={20}
+                                  alt={badge[0]}
+                                  key={idx}
+                                  src={badgeUrl}
+                                />
+                              );
+                            },
+                          )}
                       </div>
                       <span
                         className="font-semibold"

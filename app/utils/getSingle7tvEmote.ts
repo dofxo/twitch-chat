@@ -18,7 +18,6 @@ export const getEmoteUrlByName = (
       return `https://cdn.7tv.app/emote/${emote.id}/${file.name}`;
     }
   } else {
-    console.error("Emote not found.");
     return null;
   }
 };
