@@ -40,7 +40,7 @@ const Chats: React.FC = () => {
         const badgesData: any = await scrapeBadgeData(channel);
         if (badgesData) setBadgeData(badgesData);
 
-        const { emotesList } = await get7tvEmotes(channel);
+        const emotesList = await get7tvEmotes(channel);
 
         const eventSource = new EventSource(
           `/api/twitchChat?channel=${channel}`,
@@ -50,18 +50,45 @@ const Chats: React.FC = () => {
           try {
             const data = JSON.parse(event.data);
 
-            // convert data and replace emotes with their image url
-            data.content = data.content
-              .split(" ")
-              .map((msg: string) => {
-                const emote = getEmoteUrlByName(emotesList, msg);
-                if (emote) {
-                  return emote;
-                } else {
-                  return msg;
-                }
-              })
-              .join(" ");
+            const emotesRaw = data.chatInfo["emotes-raw"];
+
+            if (emotesRaw) {
+              const emoteUrl = `https://static-cdn.jtvnw.net/emoticons/v2/${emotesRaw.split(":")[0]}/static/light/3.0`;
+              const emotePlaces = emotesRaw.split(":")[1].split(",");
+
+              let result = data.content;
+
+              // Sort ranges in descending order by start index to avoid index shifting
+              const sortedRanges = [...emotePlaces].sort((a, b) => {
+                const [startA] = a.split("-").map(Number);
+                const [startB] = b.split("-").map(Number);
+                return startB - startA;
+              });
+
+              sortedRanges.forEach((range) => {
+                const [start, end] = range.split("-").map(Number);
+                const before = result.slice(0, start);
+                const after = result.slice(end + 1);
+                result = before + emoteUrl + after;
+              });
+
+              data.content = result;
+            }
+
+            // convert data and replace emotes with their image url for 7tv
+            if (emotesList) {
+              data.content = data.content
+                .split(" ")
+                .map((msg: string) => {
+                  const emote = getEmoteUrlByName(emotesList.emotesList, msg);
+                  if (emote) {
+                    return emote;
+                  } else {
+                    return msg;
+                  }
+                })
+                .join(" ");
+            }
 
             if (data.type === "chat") {
               setMessages((prev) => [...prev, data]);
@@ -170,12 +197,15 @@ const Chats: React.FC = () => {
                         {msg.content
                           .split(" ")
                           .map((msg: string, idx: string) => {
-                            if (msg.startsWith("https://cdn.7tv.app/")) {
+                            if (
+                              msg.startsWith("https://cdn.7tv.app/") ||
+                              msg.startsWith("https://static-cdn.jtvnw.net/")
+                            ) {
                               return (
                                 <Image
                                   key={idx}
-                                  width={60}
-                                  height={60}
+                                  width={40}
+                                  height={40}
                                   alt="7tvEmote"
                                   src={msg}
                                 />
