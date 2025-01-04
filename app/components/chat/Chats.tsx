@@ -36,6 +36,9 @@ const Chats: React.FC = () => {
   const eventSourceRef = useRef<EventSource | null>(null);
 
   useEffect(() => {
+    // makes sure to disconnect from twitch chat if there is any.
+    if (eventSourceRef.current) eventSourceRef.current = null;
+
     if (!channel) return;
     (async () => {
       setLoading(true);
@@ -181,7 +184,7 @@ const Chats: React.FC = () => {
           <div className="chat-box border p-4 rounded bg-gray-100 shadow grid">
             {!loading ? (
               <>
-                <Button className="w-fit mb-10" onClick={disconnect}>
+                <Button className="w-fit mb-10" onClick={disconnectChat}>
                   <ArrowLeft />
                 </Button>
                 <h2 className="font-bold mb-2 text-lg text-purple-600 flex items-center gap-2">
@@ -256,6 +259,7 @@ const Chats: React.FC = () => {
                                   height={40}
                                   alt="7tvEmote"
                                   src={msg}
+                                  className="!w-max h-[50px]"
                                 />
                               );
                             } else {
