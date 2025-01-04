@@ -188,7 +188,7 @@ const Chats: React.FC = () => {
                   {messages.map((msg: any, index) => (
                     <div
                       key={index}
-                      className="message p-2 bg-white rounded shadow flex items-center gap-2 relative"
+                      className="message p-2 bg-white rounded shadow flex items-center gap-2 relative flex-wrap"
                     >
                       <span className="text-gray-400 text-[12px]">
                         {msg.time}

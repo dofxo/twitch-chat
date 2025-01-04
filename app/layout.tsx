@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Roboto, Vazirmatn } from "next/font/google";
 import "./globals.scss";
 
 const RobotoFont = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
   subsets: ["latin"],
+});
+const VazirmatnFont = Vazirmatn({
+  subsets: ["arabic"],
 });
 
 export const metadata: Metadata = {
@@ -19,7 +22,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="light">
-      <body className={`${RobotoFont.className} antialiased`}>{children}</body>
+      <body
+        className={`${RobotoFont.className} ${VazirmatnFont.className} antialiased`}
+      >
+        {children}
+      </body>
     </html>
   );
 }
