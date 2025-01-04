@@ -30,6 +30,8 @@ const Chats: React.FC = () => {
   const [badgeData, setBadgeData] = useState();
   const [buttonLoading, setButtonLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
 
   useEffect(() => {
     if (!channel) return;
@@ -90,6 +92,9 @@ const Chats: React.FC = () => {
                 .join(" ");
             }
 
+            // add time to chats
+            data.time = new Date().toLocaleTimeString();
+
             if (data.type === "chat") {
               setMessages((prev) => [...prev, data]);
             }
@@ -104,6 +109,23 @@ const Chats: React.FC = () => {
       }
     })();
   }, [channel]);
+
+  useEffect(() => {
+    if (isUserScrolling) return;
+
+    const chatEndElement = chatContainerRef.current?.querySelector(".chat-end");
+    chatEndElement?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isUserScrolling]);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    if (!chatContainerRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
+
+    // Check if the user has scrolled near the bottom
+    const isAtBottom = scrollTop + clientHeight >= scrollHeight - 50;
+
+    setIsUserScrolling(!isAtBottom);
+  };
 
   return (
     <section>
@@ -158,12 +180,19 @@ const Chats: React.FC = () => {
                   />
                   <span>{channel}</span>
                 </h2>
-                <div className="messages space-y-2 max-h-[75vh] overflow-y-auto">
+                <div
+                  className="messages space-y-2 max-h-[75vh] overflow-y-auto"
+                  ref={chatContainerRef}
+                  onScroll={handleScroll}
+                >
                   {messages.map((msg: any, index) => (
                     <div
                       key={index}
-                      className="message p-2 bg-white rounded shadow flex items-center gap-2"
+                      className="message p-2 bg-white rounded shadow flex items-center gap-2 relative"
                     >
+                      <span className="text-gray-400 text-[12px]">
+                        {msg.time}
+                      </span>
                       <div className="badges flex items-center gap-2">
                         {msg.chatInfo.badges &&
                           Object.entries(msg.chatInfo.badges).map(
@@ -193,7 +222,12 @@ const Chats: React.FC = () => {
                       >
                         {msg.chatInfo["display-name"]}:
                       </span>
-                      <span className="text-gray-800 flex items-center gap-2">
+                      <span className="messages text-gray-800 flex items-center gap-2 flex-wrap">
+                        {msg["first-msg"] && (
+                          <span className="absolute top-2 p-1 rounded right-2 first-message bg-[#8f24f2] text-gray-200 text-[12px]">
+                            first message
+                          </span>
+                        )}
                         {msg.content
                           .split(" ")
                           .map((msg: string, idx: string) => {
@@ -217,6 +251,7 @@ const Chats: React.FC = () => {
                       </span>
                     </div>
                   ))}
+                  <span className="chat-end"></span>
                 </div>
               </>
             ) : (
