@@ -15,24 +15,31 @@ import {
   getBadgeUrl,
   scrapeBadgeData,
 } from "@/app/utils/getBadgesUrl";
-import { disconnect } from "process";
 
 interface Message {
   channel: string;
   displayName: string;
   content: string;
+  time: string;
+  type: string;
+  chatInfo: {
+    badges: Record<string, string>;
+    "display-name": string;
+    color: string;
+  };
+  "first-msg"?: boolean;
 }
 
 const Chats: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [avatar, setAvatar] = useState(null);
-  const [channel, setChannel] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [badgeData, setBadgeData] = useState();
-  const [buttonLoading, setButtonLoading] = useState(false);
+  const [avatar, setAvatar] = useState<string | null>(null);
+  const [channel, setChannel] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [badgeData, setBadgeData] = useState<badgeDataType | null>(null);
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const [isUserScrolling, setIsUserScrolling] = useState(false);
+  const [isUserScrolling, setIsUserScrolling] = useState<boolean>(false);
   const eventSourceRef = useRef<EventSource | null>(null);
 
   useEffect(() => {
@@ -44,7 +51,7 @@ const Chats: React.FC = () => {
       setLoading(true);
 
       try {
-        const badgesData: any = await scrapeBadgeData(channel);
+        const badgesData = await scrapeBadgeData(channel);
         if (badgesData) setBadgeData(badgesData);
 
         const emotesList = await get7tvEmotes(channel);
@@ -124,7 +131,7 @@ const Chats: React.FC = () => {
     chatEndElement?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isUserScrolling]);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+  const handleScroll = () => {
     if (!chatContainerRef.current) return;
     const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current;
 
@@ -169,7 +176,7 @@ const Chats: React.FC = () => {
 
                   const avatarUrl = await getUserAvatar(channelName);
                   setAvatar(avatarUrl);
-                } catch (error) {
+                } catch {
                   toast.error("channel does not exist");
                 } finally {
                   setButtonLoading(false);
@@ -202,7 +209,7 @@ const Chats: React.FC = () => {
                   ref={chatContainerRef}
                   onScroll={handleScroll}
                 >
-                  {messages.map((msg: any, index) => (
+                  {messages.map((msg: Message, index) => (
                     <div
                       key={index}
                       className="message p-2 bg-white rounded shadow flex items-center gap-2 relative flex-wrap"
@@ -217,7 +224,7 @@ const Chats: React.FC = () => {
                               const combinedBadge = `${badge[0]}/${badge[1]}`;
                               const badgeUrl = getBadgeUrl(
                                 combinedBadge,
-                                badgeData as unknown as badgeDataType,
+                                badgeData as badgeDataType,
                               );
 
                               if (!badgeUrl) return null;
@@ -247,7 +254,7 @@ const Chats: React.FC = () => {
                         )}
                         {msg.content
                           .split(" ")
-                          .map((msg: string, idx: string) => {
+                          .map((msg: string, idx: number) => {
                             if (
                               msg.startsWith("https://cdn.7tv.app/") ||
                               msg.startsWith("https://static-cdn.jtvnw.net/")

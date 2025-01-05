@@ -23,6 +23,14 @@ export async function GET(req: NextRequest) {
           }
         };
 
+        // notify on chat connection
+        sendMessage(
+          JSON.stringify({
+            type: "info",
+            content: `connected to ${channel}'s chat`,
+          }),
+        );
+
         const onMessage = (
           channelName: string,
           userstate: tmi.Userstate,

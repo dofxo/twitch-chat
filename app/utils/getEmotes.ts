@@ -11,7 +11,7 @@ export const get7tvEmotes = async (username: string) => {
     );
 
     return { emotesList };
-  } catch (error) {
+  } catch {
     return null;
   }
 };

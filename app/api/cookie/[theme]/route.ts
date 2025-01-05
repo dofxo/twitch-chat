@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 
 export async function POST(
-  _: any,
+  _: Request,
   { params }: { params: Promise<{ theme: string }> },
 ) {
   // get theme name from url

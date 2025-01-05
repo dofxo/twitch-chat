@@ -13,7 +13,7 @@ import { useEffect } from "react";
 const Header = ({ theme }: { theme: { name: string; value: string } }) => {
   useEffect(() => {
     changeTheme(theme.value ?? "primary");
-  }, []);
+  }, [theme.value]);
 
   return (
     <header className="shadow p-3">

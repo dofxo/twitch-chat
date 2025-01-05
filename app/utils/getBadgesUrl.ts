@@ -1,6 +1,8 @@
 export type badgeDataType = { badgeName: string; badgeUrl: string | null }[];
 
-export const scrapeBadgeData = async (channel: string) => {
+export const scrapeBadgeData = async (
+  channel: string,
+): Promise<badgeDataType | undefined> => {
   try {
     // Fetch the page content using fetch API
     const globalBadgesPage = await fetch(
@@ -29,14 +31,16 @@ export const scrapeBadgeData = async (channel: string) => {
 
     const badgeData: badgeDataType = [];
 
-    const streamerSubBadgeElements = streamerPageDoc.querySelectorAll(
-      "a.text-decoration-none",
-    );
+    const streamerSubBadgeElements =
+      streamerPageDoc.querySelectorAll<HTMLAnchorElement>(
+        "a.text-decoration-none",
+      );
 
-    streamerSubBadgeElements.forEach((element: any) => {
+    streamerSubBadgeElements.forEach((element) => {
       if (!element.href.includes("channel-badges")) return;
+
       const badgeName = element.href.split("channel-badges/")[1];
-      const image = element.querySelector("img")!;
+      const image = element.querySelector<HTMLImageElement>("img");
 
       const badgeUrl = image ? image.src : null;
 
@@ -46,12 +50,12 @@ export const scrapeBadgeData = async (channel: string) => {
     });
 
     // Find all badge images and extract their src attribute from global badges
-    const badgeElements = globalBadgesDoc.querySelectorAll(
+    const badgeElements = globalBadgesDoc.querySelectorAll<HTMLAnchorElement>(
       "a.text-decoration-none",
     );
-    badgeElements.forEach((element: any) => {
+    badgeElements.forEach((element) => {
       const badgeName = element.href.split("global-badges/")[1];
-      const image = element.querySelector("img")!;
+      const image = element.querySelector<HTMLImageElement>("img");
 
       const badgeUrl = image ? image.src : null;
 
@@ -66,8 +70,11 @@ export const scrapeBadgeData = async (channel: string) => {
   }
 };
 
-export const getBadgeUrl = (badgeName: string, badgesData: badgeDataType) => {
-  if (badgesData) {
-    return badgesData.find((badge) => badge.badgeName === badgeName)?.badgeUrl;
-  }
+export const getBadgeUrl = (
+  badgeName: string,
+  badgesData: badgeDataType,
+): string | null => {
+  return (
+    badgesData.find((badge) => badge.badgeName === badgeName)?.badgeUrl || null
+  );
 };
