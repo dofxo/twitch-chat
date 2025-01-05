@@ -64,9 +64,8 @@ const Chats: React.FC = () => {
           try {
             const data = JSON.parse(event.data);
 
-            const emotesRaw = data.chatInfo["emotes-raw"];
-
-            if (emotesRaw) {
+            if (data.chatInfo) {
+              const emotesRaw = data.chatInfo["emotes-raw"];
               const emoteUrl = `https://static-cdn.jtvnw.net/emoticons/v2/${emotesRaw.split(":")[0]}/static/light/3.0`;
               const emotePlaces = emotesRaw.split(":")[1].split(",");
 
