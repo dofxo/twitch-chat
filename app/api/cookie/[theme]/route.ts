@@ -7,8 +7,6 @@ export async function POST(
   // get theme name from url
   const { theme } = await params;
 
-  console.log(theme);
-
   const cookieStore = await cookies();
 
   // set cookie

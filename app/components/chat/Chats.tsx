@@ -66,26 +66,28 @@ const Chats: React.FC = () => {
 
             if (data.chatInfo) {
               const emotesRaw = data.chatInfo["emotes-raw"];
-              const emoteUrl = `https://static-cdn.jtvnw.net/emoticons/v2/${emotesRaw.split(":")[0]}/static/light/3.0`;
-              const emotePlaces = emotesRaw.split(":")[1].split(",");
+              if (emotesRaw) {
+                const emoteUrl = `https://static-cdn.jtvnw.net/emoticons/v2/${emotesRaw.split(":")[0]}/static/light/3.0`;
+                const emotePlaces = emotesRaw.split(":")[1].split(",");
 
-              let result = data.content;
+                let result = data.content;
 
-              // Sort ranges in descending order by start index to avoid index shifting
-              const sortedRanges = [...emotePlaces].sort((a, b) => {
-                const [startA] = a.split("-").map(Number);
-                const [startB] = b.split("-").map(Number);
-                return startB - startA;
-              });
+                // Sort ranges in descending order by start index to avoid index shifting
+                const sortedRanges = [...emotePlaces].sort((a, b) => {
+                  const [startA] = a.split("-").map(Number);
+                  const [startB] = b.split("-").map(Number);
+                  return startB - startA;
+                });
 
-              sortedRanges.forEach((range) => {
-                const [start, end] = range.split("-").map(Number);
-                const before = result.slice(0, start);
-                const after = result.slice(end + 1);
-                result = before + emoteUrl + after;
-              });
+                sortedRanges.forEach((range) => {
+                  const [start, end] = range.split("-").map(Number);
+                  const before = result.slice(0, start);
+                  const after = result.slice(end + 1);
+                  result = before + emoteUrl + after;
+                });
 
-              data.content = result;
+                data.content = result;
+              }
             }
 
             // convert data and replace emotes with their image url for 7tv
