@@ -162,10 +162,10 @@ const Chats: React.FC = () => {
       <Toaster position="top-center" reverseOrder={false} />
       <div className="container flex flex-col gap-4">
         {!channel ? (
-          <div className="input-wrapper flex gap-2">
+          <div className="input-wrapper flex flex-col md:flex-row gap-2">
             <Input
               placeholder="enter your streamer channel name"
-              className="w-[200px]"
+              className="md:w-[200px]"
               ref={inputRef}
             />
 
