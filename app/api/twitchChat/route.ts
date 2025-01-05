@@ -23,14 +23,6 @@ export async function GET(req: NextRequest) {
           }
         };
 
-        // notify on chat connection
-        sendMessage(
-          JSON.stringify({
-            type: "info",
-            content: `connected to ${channel}'s chat`,
-          }),
-        );
-
         const onMessage = (
           channelName: string,
           userstate: tmi.Userstate,
@@ -57,6 +49,15 @@ export async function GET(req: NextRequest) {
           });
 
           client.connect();
+
+          // notify on chat connection
+          sendMessage(
+            JSON.stringify({
+              type: "info",
+              content: "chat is connected ✅",
+            }),
+          );
+
           client.on("message", onMessage);
 
           // Handle disconnect by closing the stream
@@ -64,6 +65,13 @@ export async function GET(req: NextRequest) {
             if (isStreamOpen) {
               isStreamOpen = false; // Mark the stream as closed
               controller.close(); // Close the stream when disconnected
+              // notify on chat connection
+              sendMessage(
+                JSON.stringify({
+                  type: "info",
+                  content: "chat is disconnected ❌",
+                }),
+              );
             }
           });
 

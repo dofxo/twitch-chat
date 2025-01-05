@@ -40,6 +40,7 @@ const Chats: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isUserScrolling, setIsUserScrolling] = useState<boolean>(false);
+  const [infoMessage, setInfoMessage] = useState("");
   const eventSourceRef = useRef<EventSource | null>(null);
 
   useEffect(() => {
@@ -112,6 +113,10 @@ const Chats: React.FC = () => {
               setMessages((prev) => [...prev, data]);
             }
 
+            if (data.type === "info") {
+              setInfoMessage(data.content);
+            }
+
             eventSourceRef.current = eventSource;
           } catch (error) {
             console.error("Error processing SSE:", error);
@@ -155,7 +160,6 @@ const Chats: React.FC = () => {
   return (
     <section>
       <Toaster position="top-center" reverseOrder={false} />
-
       <div className="container flex flex-col gap-4">
         {!channel ? (
           <div className="input-wrapper flex gap-2">
@@ -205,6 +209,13 @@ const Chats: React.FC = () => {
                   />
                   <span>{channel}</span>
                 </h2>
+                <span className="text-yellow-600 my-[15px]">
+                  {infoMessage ? (
+                    <span className="text-green-600">{infoMessage}</span>
+                  ) : (
+                    "connecting to chat..."
+                  )}
+                </span>
                 <div
                   className="messages space-y-2 max-h-[75vh] overflow-y-auto"
                   ref={chatContainerRef}
