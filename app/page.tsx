@@ -7,13 +7,13 @@ const page = async () => {
   // receive cookies to use it for theme
   const cookieStore = await cookies();
   const theme = cookieStore.get("theme") ?? {
-    name: "primary",
-    value: "#fff7f7",
+    name: "theme",
+    value: "primary",
   };
 
   return (
     <>
-      <Header theme={theme} />
+      <Header theme={theme.value} />
       <main className="grid gap-[24px] mt-[20px] mb-10">
         <Chats />
       </main>

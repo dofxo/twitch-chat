@@ -10,10 +10,10 @@ import { themes } from "./themes";
 import { Paintbrush } from "lucide-react";
 import { useEffect } from "react";
 
-const Header = ({ theme }: { theme: { name: string; value: string } }) => {
+const Header = ({ theme }: { theme: string }) => {
   useEffect(() => {
-    changeTheme(theme.value ?? "primary");
-  }, [theme.value]);
+    changeTheme(theme);
+  }, []);
 
   return (
     <header className="shadow p-3">
@@ -27,7 +27,7 @@ const Header = ({ theme }: { theme: { name: string; value: string } }) => {
             {themes.map((theme) => (
               <div
                 key={theme.colorScheme}
-                onClick={() => changeTheme(`${theme.themeName}`)}
+                onClick={() => changeTheme(theme.themeName)}
                 style={{ backgroundColor: theme.colorScheme }}
                 className={`w-[20px] h-[20px] shadow-[inset_0_0_2px_0_#222000] rounded-full cursor-pointer`}
               />
