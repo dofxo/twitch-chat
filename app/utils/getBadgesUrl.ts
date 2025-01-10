@@ -5,12 +5,11 @@ export const scrapeBadgeData = async (
 ): Promise<badgeDataType | undefined> => {
   try {
     // Fetch the page content using fetch API
-    const globalBadgesPage = await fetch(
-      "https://www.streamdatabase.com/twitch/global-badges",
-    );
+    const globalBadgesPage = await fetch("/api/proxy?type=global-badges");
 
+    // Fetch streamer data
     const streamerPage = await fetch(
-      `https://www.streamdatabase.com/twitch/channels/${channel}`,
+      `/api/proxy?type=streamer&channel=${channel}`,
     );
 
     const globalBadgesPageData = await globalBadgesPage.text();
