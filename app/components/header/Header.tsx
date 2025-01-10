@@ -18,9 +18,7 @@ const Header = ({ theme }: { theme: string }) => {
   return (
     <header className="shadow p-3">
       <div className="container flex justify-between items-center">
-        <h1 className="font-bold text-2xl text-[--text-color]">
-          Twitch Chat Overlay
-        </h1>
+        <h1 className="font-bold text-2xl text-[--text-color]">Twitch Chat</h1>
         <Popover>
           <PopoverTrigger>
             <Paintbrush color="var(--text-color)" />
