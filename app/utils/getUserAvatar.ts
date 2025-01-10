@@ -5,5 +5,5 @@ export const getUserAvatar = async (username: string) => {
     `https://decapi.me/twitch/avatar/${username}`,
   );
 
-  return avatarUrl;
+  return !avatarUrl.startsWith("User not found") ? avatarUrl : null;
 };

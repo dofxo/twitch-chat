@@ -185,6 +185,11 @@ const Chats: React.FC = () => {
 
                   const avatarUrl = await getUserAvatar(channelName);
                   setAvatar(avatarUrl);
+
+                  if (!avatarUrl) {
+                    toast.error("channel does not exist");
+                    setChannel("");
+                  }
                 } catch {
                   toast.error("channel does not exist");
                 } finally {
