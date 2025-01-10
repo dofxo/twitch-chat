@@ -162,7 +162,10 @@ const Chats: React.FC = () => {
       <Toaster position="top-center" reverseOrder={false} />
       <div className="container flex flex-col gap-4">
         {!channel ? (
-          <div className="input-wrapper flex flex-col md:flex-row gap-2">
+          <form
+            className="input-wrapper flex flex-col md:flex-row gap-2"
+            onSubmit={(e) => e.preventDefault()}
+          >
             <Input
               placeholder="enter your streamer channel name"
               className="md:w-[200px]"
@@ -171,6 +174,7 @@ const Chats: React.FC = () => {
 
             <Button
               disabled={buttonLoading}
+              type="submit"
               onClick={async () => {
                 if (!inputRef.current) return;
 
@@ -191,7 +195,7 @@ const Chats: React.FC = () => {
               {buttonLoading && <Loader2 className="animate-spin" />}
               submit channel name
             </Button>
-          </div>
+          </form>
         ) : (
           <div className="chat-box border p-4 rounded bg-gray-100 shadow grid">
             {!loading ? (
