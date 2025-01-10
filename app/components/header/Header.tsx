@@ -18,12 +18,14 @@ const Header = ({ theme }: { theme: string }) => {
   return (
     <header className="shadow p-3">
       <div className="container flex justify-between items-center">
-        <h1>Twitch Chat Overlay</h1>
+        <h1 className="font-bold text-2xl text-[--text-color]">
+          Twitch Chat Overlay
+        </h1>
         <Popover>
           <PopoverTrigger>
-            <Paintbrush />
+            <Paintbrush color="var(--text-color)" />
           </PopoverTrigger>
-          <PopoverContent className="bg-[var(--bg-color)] flex gap-5 shadow shadow-gray-500 p-2 rounded right-[50%] translate-x-[50%] top-2  w-[max-content] absolute">
+          <PopoverContent className="bg-[var(--bg-color)] flex max-w-[200px] flex-wrap gap-5 shadow shadow-gray-500 p-2 rounded right-[100%] top-2  w-[max-content] absolute">
             {themes.map((theme) => (
               <div
                 key={theme.colorScheme}

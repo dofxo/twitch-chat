@@ -209,10 +209,13 @@ const Chats: React.FC = () => {
             </Button>
           </form>
         ) : (
-          <div className="chat-box border p-4 rounded bg-gray-100 shadow grid">
+          <div className="chat-box p-4 rounded bg-[--chat-list-bg] shadow grid">
             {!loading ? (
               <>
-                <Button className="w-fit mb-10" onClick={disconnectChat}>
+                <Button
+                  className="w-fit mb-10 bg-[--back-arrow-bg] text-[--back-arrow-text-color]"
+                  onClick={disconnectChat}
+                >
                   <ArrowLeft />
                 </Button>
                 <h2 className="font-bold mb-2 text-lg text-purple-600 flex items-center gap-2">
@@ -227,7 +230,7 @@ const Chats: React.FC = () => {
                 </h2>
                 <span className="text-yellow-600 my-[15px]">
                   {infoMessage ? (
-                    <span className="text-green-600">{infoMessage}</span>
+                    <span className="text-green-900">{infoMessage}</span>
                   ) : (
                     "connecting to chat..."
                   )}
@@ -240,7 +243,7 @@ const Chats: React.FC = () => {
                   {messages.map((msg: Message, index) => (
                     <div
                       key={index}
-                      className="message p-2 bg-white rounded shadow flex items-center gap-2 relative flex-wrap"
+                      className="message p-2 bg-[--single-chat-bg] rounded shadow flex items-center gap-2 relative flex-wrap"
                     >
                       <span className="text-gray-400 text-[12px]">
                         {msg.time}
@@ -274,7 +277,7 @@ const Chats: React.FC = () => {
                       >
                         {msg.chatInfo["display-name"]}:
                       </span>
-                      <span className="messages text-gray-800 flex items-center gap-2 flex-wrap">
+                      <span className="messages text-[--text-color] flex items-center gap-2 flex-wrap">
                         {msg["first-msg"] && (
                           <span className="absolute top-2 p-1 rounded right-2 first-message bg-[#8f24f2] text-gray-200 text-[12px]">
                             first message

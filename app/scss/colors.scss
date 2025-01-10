@@ -1,10 +1,118 @@
 :root {
   &[data-theme="primary"] {
     --bg-color: #FFF7F7;
+    --chat-list-bg: #fbe9e9;
+    --single-chat-bg: #faf4f4;
+    --back-arrow-bg: #222;
+    --text-color: #222;
+    --back-arrow-text-color: #ffffff;
   }
 
   &[data-theme="purple"] {
     --bg-color: #C68FE6;
+    --chat-list-bg: #b17cd6;
+    --single-chat-bg: #d6b3f2;
+    --back-arrow-bg: #4a275b;
+    --text-color: #222;
+    --back-arrow-text-color: #ffffff;
   }
 
+  &[data-theme="dark"] {
+    --bg-color: #121212;
+    --chat-list-bg: #1e1e1e;
+    --single-chat-bg: #2a2a2a;
+    --back-arrow-bg: #ffffff;
+    --text-color: #ffffff;
+    --back-arrow-text-color: #222;
+  }
+
+  &[data-theme="light"] {
+    --bg-color: #f5f5f5;
+    --chat-list-bg: #e0e0e0;
+    --single-chat-bg: #ffffff;
+    --back-arrow-bg: #222222;
+    --text-color: #222;
+    --back-arrow-text-color: #ffffff;
+  }
+
+  &[data-theme="blue"] {
+    --bg-color: #b3d9ff;
+    --chat-list-bg: #99c2ff;
+    --single-chat-bg: #cce6ff;
+    --back-arrow-bg: #003366;
+    --text-color: #222;
+    --back-arrow-text-color: #ffffff;
+  }
+
+  &[data-theme="green"] {
+    --bg-color: #d4f7d7;
+    --chat-list-bg: #b9e6bb;
+    --single-chat-bg: #e8fce9;
+    --back-arrow-bg: #2a5832;
+    --text-color: #222;
+    --back-arrow-text-color: #ffffff;
+  }
+
+  &[data-theme="red"] {
+    --bg-color: #ffe6e6;
+    --chat-list-bg: #ffcccc;
+    --single-chat-bg: #ffd6d6;
+    --back-arrow-bg: #660000;
+    --text-color: #222;
+    --back-arrow-text-color: #ffffff;
+  }
+
+  &[data-theme="yellow"] {
+    --bg-color: #fff9d9;
+    --chat-list-bg: #fff4b3;
+    --single-chat-bg: #fffbd6;
+    --back-arrow-bg: #665500;
+    --text-color: #222;
+    --back-arrow-text-color: #ffffff;
+  }
+
+  &[data-theme="dark-blue"] {
+    --bg-color: #0a1a2e;
+    --chat-list-bg: #0d2439;
+    --single-chat-bg: #112f4c;
+    --back-arrow-bg: #ffffff;
+    --text-color: #ffffff;
+    --back-arrow-text-color: #222;
+  }
+
+  &[data-theme="dark-green"] {
+    --bg-color: #102a23;
+    --chat-list-bg: #164034;
+    --single-chat-bg: #1d4e40;
+    --back-arrow-bg: #ffffff;
+    --text-color: #ffffff;
+    --back-arrow-text-color: #222;
+  }
+
+  &[data-theme="dark-purple"] {
+    --bg-color: #1a0e2a;
+    --chat-list-bg: #240f38;
+    --single-chat-bg: #311a4c;
+    --back-arrow-bg: #ffffff;
+    --text-color: #ffffff;
+    --back-arrow-text-color: #222;
+  }
+
+  &[data-theme="dark-red"] {
+    --bg-color: #2e0a0a;
+    --chat-list-bg: #400d0d;
+    --single-chat-bg: #5a1b1b;
+    --back-arrow-bg: #ffffff;
+    --text-color: #ffffff;
+    --back-arrow-text-color: #222;
+  }
+
+  &[data-theme="dark-yellow"] {
+    --bg-color: #2e2a0a;
+    --chat-list-bg: #403d0d;
+    --single-chat-bg: #5a5531;
+    --back-arrow-bg: #ffffff;
+    --text-color: #ffffff;
+    --back-arrow-text-color: #222;
+  }
 }
