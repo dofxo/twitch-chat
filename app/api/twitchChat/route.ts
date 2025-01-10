@@ -70,6 +70,7 @@ export async function GET(req: NextRequest) {
 
           // Handle stream cancellation by listening to the abort signal
           abortController.signal.addEventListener("abort", () => {
+            connectedChannels.delete(channel);
             if (isStreamOpen) {
               isStreamOpen = false;
               controller.close();

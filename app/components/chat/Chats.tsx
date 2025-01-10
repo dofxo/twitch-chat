@@ -128,6 +128,12 @@ const Chats: React.FC = () => {
         setLoading(false);
       }
     })();
+
+    return () => {
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+      }
+    };
   }, [channel]);
 
   useEffect(() => {
@@ -155,6 +161,7 @@ const Chats: React.FC = () => {
     setChannel("");
     setMessages([]);
     setAvatar(null);
+    setInfoMessage("");
   };
 
   return (
