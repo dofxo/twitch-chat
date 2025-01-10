@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
           sendMessage(
             JSON.stringify({
               type: "info",
-              content: "chat is connected ✅",
+              content: `Connected to ${channel}'s chat`,
             }),
           );
 
@@ -65,13 +65,6 @@ export async function GET(req: NextRequest) {
             if (isStreamOpen) {
               isStreamOpen = false; // Mark the stream as closed
               controller.close(); // Close the stream when disconnected
-              // notify on chat connection
-              sendMessage(
-                JSON.stringify({
-                  type: "info",
-                  content: "chat is disconnected ❌",
-                }),
-              );
             }
           });
 
